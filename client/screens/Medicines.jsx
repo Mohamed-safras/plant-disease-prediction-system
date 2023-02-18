@@ -1,41 +1,136 @@
-import React from "react";
-import { Button, SafeAreaView, ScrollView, Text, View } from "react-native";
-import Card from "../components/Card";
-
-const ex_medicines = [
-  {
-    id: "bdjhjw32432",
-    src: "https://cdn.shopify.com/s/files/1/0569/9675/7697/files/what-is-chemical-fertilizers_1024x1024.jpg?v=1655866237",
-    title: "brown blight",
-    description:
-      "Brown blight disease is one of the foliar diseases of tea (Camellia sinensis) prevalent in China, Japan, Sri Lanka, and India. This disease is a serious concern for the tea industry, due to both the reduced tea yield and quality decrease. In October 2014, distinct leaf blight symptoms were observed on popular tea cultivars in commercial tea estates of Wansheng, Chongqing City (29°38′ N; 105°91′ E). The initial symptoms were characterized by water-soaked lesions on young leaves, and the lesions developed and expanded to large, dark brown, necrotic lesions, that were covered with black acervuli. Eventually the dead leaves fell from the tea plant. ",
-  },
-  {
-    id: "bdjhjw3243",
-    src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvQxcpkLmB2jHBN0S7xg5AwW1_5w5hPf6npUJN1QZXTApi1I1jO0Sz5_WhSbj4fpDstu8&usqp=CAU",
-    title: "a cautionary tale",
-    description:
-      "Brown blight disease is one of the foliar diseases of tea (Camellia sinensis) prevalent in China, Japan, Sri Lanka, and India. This disease is a serious concern for the tea industry, due to both the reduced tea yield and quality decrease. In October 2014, distinct leaf blight symptoms were observed on popular tea cultivars in commercial tea estates of Wansheng, Chongqing City (29°38′ N; 105°91′ E). The initial symptoms were characterized by water-soaked lesions on young leaves, and the lesions developed and expanded to large, dark brown, necrotic lesions, that were covered with black acervuli. Eventually the dead leaves fell from the tea plant. ",
-  },
-  {
-    id: "bdjhjw32434",
-    src: "https://i1.wp.com/gardenprofessors.com/wp-content/uploads/Untitled-1-1.jpg",
-    title: "brown blight",
-    description:
-      "Brown blight disease is one of the foliar diseases of tea (Camellia sinensis) prevalent in China, Japan, Sri Lanka, and India. This disease is a serious concern for the tea industry, due to both the reduced tea yield and quality decrease. In October 2014, distinct leaf blight symptoms were observed on popular tea cultivars in commercial tea estates of Wansheng, Chongqing City (29°38′ N; 105°91′ E). The initial symptoms were characterized by water-soaked lesions on young leaves, and the lesions developed and expanded to large, dark brown, necrotic lesions, that were covered with black acervuli. Eventually the dead leaves fell from the tea plant. ",
-  },
-  ,
-  {
-    id: "bdjhjw32435",
-    src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWSgqjEsuyGYegHs1DRt6m1Z4DVa_W_Zw-Ka5_LIglm_idIVpcepaYm-XbniUVAVZGtYQ&usqp=CAU",
-    title: "brown blight",
-    description:
-      "Brown blight disease is one of the foliar diseases of tea (Camellia sinensis) prevalent in China, Japan, Sri Lanka, and India. This disease is a serious concern for the tea industry, due to both the reduced tea yield and quality decrease. In October 2014, distinct leaf blight symptoms were observed on popular tea cultivars in commercial tea estates of Wansheng, Chongqing City (29°38′ N; 105°91′ E). The initial symptoms were characterized by water-soaked lesions on young leaves, and the lesions developed and expanded to large, dark brown, necrotic lesions, that were covered with black acervuli. Eventually the dead leaves fell from the tea plant. ",
-  },
-];
-
-export default function Medicines({ navigation }) {
+import { useRoute } from "@react-navigation/native";
+import axios from "axios";
+import { StatusBar } from "expo-status-bar";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Button,
+  Dimensions,
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { ThemeContext } from "../context/theme";
+import { colors } from "../theme/colors";
+import { dark, light } from "../theme/theme";
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
+export default function Medicines() {
+  const { theme } = useContext(ThemeContext);
+  const route = useRoute();
+  console.log(route);
+  const { control, treatements, description } = route.params;
+  console.log(treatements);
   return (
-    <SafeAreaView style={{ paddingLeft: 20, paddingRight: 20 }}></SafeAreaView>
+    <SafeAreaView
+      style={[
+        styles.container,
+        {
+          paddingLeft: 20,
+          paddingRight: 20,
+          backgroundColor:
+            theme === "dark" ? dark.background : light.background,
+        },
+      ]}
+    >
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.description}>
+          <Text
+            style={[
+              styles.descriptionText,
+              {
+                textTransform: "uppercase",
+                fontSize: 18,
+                color:
+                  theme === "dark"
+                    ? dark.predictionColor
+                    : light.predictionColor,
+              },
+            ]}
+          >
+            Description
+          </Text>
+          <Text
+            style={[styles.descriptionText, { color: colors.inactiveColor }]}
+          >
+            {description}
+          </Text>
+        </View>
+        <View>
+          <Text
+            style={[
+              styles.descriptionText,
+              {
+                fontSize: 18,
+                color:
+                  theme === "dark"
+                    ? dark.predictionColor
+                    : light.predictionColor,
+              },
+            ]}
+          >
+            Treatements
+          </Text>
+          {treatements.map((treatement, index) => (
+            <View style={[styles.treatement, {}]} key={index}>
+              <Text
+                style={[
+                  styles.descriptionText,
+                  { fontSize: 16, color: colors.colorWhite },
+                ]}
+              >
+                {index + 1} . {treatement}
+              </Text>
+            </View>
+          ))}
+        </View>
+
+        <View>
+          <Text
+            style={[
+              styles.descriptionText,
+              {
+                fontSize: 18,
+                color:
+                  theme === "dark"
+                    ? dark.predictionColor
+                    : light.predictionColor,
+              },
+            ]}
+          >
+            Control
+          </Text>
+          <Text
+            style={[
+              styles.descriptionText,
+              { fontSize: 16, color: colors.inactiveColor },
+            ]}
+          >
+            {control}
+          </Text>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {},
+  description: {
+    width: "100%",
+    marginVertical: 5,
+  },
+  descriptionText: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginVertical: 5,
+  },
+  treatement: {
+    backgroundColor: colors.colorGreen,
+    marginVertical: 5,
+    padding: 10,
+    borderRadius: 10,
+  },
+});
